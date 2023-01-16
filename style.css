@@ -81,7 +81,11 @@ body {
     box-shadow: 2px 2px black;
 }
 
-.btn.operator {
+.btn.operator, .btn.equals {
     background-color: green;
+}
+
+.pressed {
+    background-color:rgb(206, 206, 206)
 }
 

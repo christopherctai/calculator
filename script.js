@@ -33,70 +33,100 @@ function operate(operator, firstNumber, secondNumber) {
 }
 
 
-function addNumber() {
-    if (displayValue.firstNumber.split('').length > 5 || displayValue.secondNumber.split('').length > 5) {
+function addNumber(button) {
+    if (operation.firstNumber.length + operation.secondNumber.length > 12) {
         alert("You've reached the maximum input.");
         return;
+    } 
+    if (operation.operator === '') {
+        operation.firstNumber += button.textContent;
+        displayBottom.textContent = `${operation.firstNumber}`;
+    } else if (operation.operator) {
+        operation.secondNumber += button.textContent;
+        displayBottom.textContent = `${operation.secondNumber}`;
     }
-    if (displayValue.operator === '') {
-        displayValue.firstNumber += button.textContent;
-    } else if (displayValue.operator) {
-        displayValue.secondNumber += button.textContent;
-        console.log(displayValue.operator);
-    }
-    displayBottom.textContent = `${displayValue.firstNumber} ${displayValue.operator} ${displayValue.secondNumber}`;
 }
 
 
-function addOperator() {
-    if (button.textContent === '=') {
-        solution = operate(displayValue.operator, displayValue.firstNumber, displayValue.secondNumber);
-        displayBottom.textContent = `${solution}`;
+function addOperator(button) {
+    if (operation.firstNumber != '' && operation.operator === '') {
+        operation.operator = button.textContent;
+        button.classList.add('.pressed');
+    } 
+    displayTop.textContent = `${operation.firstNumber} ${operation.operator} ${operation.secondNumber}`;
+}
+
+
+function performOperation() {
+    operation.solution = operate(operation.operator, operation.firstNumber, operation.secondNumber);
+    if (operation.solution.length > 13) {
         clearDisplayValue();
+        displayBottom.textContent = 'ERROR';
         return;
     }
-    else if (displayValue.firstNumber != '' && displayValue.operator === '') {
-        displayValue.operator = button.textContent;
-    } 
-    displayBottom.textContent = `${displayValue.firstNumber} ${displayValue.operator} ${displayValue.secondNumber}`;
+    displayBottom.textContent = `${operation.solution}`;
+    clearDisplayValue();
+    operation.firstNumber = operation.solution;
 }
+
 
 
 function clearDisplay() {
     displayBottom.textContent = '';
+    displayTop.textContent = '';
 }
 
 
 function clearDisplayValue() {
-    displayValue.firstNumber = '';
-    displayValue.operator = '';
-    displayValue.secondNumber = '';
+    operation.firstNumber = '';
+    operation.operator = '';
+    operation.secondNumber = '';
+    operation.solution = '';
 }
 
 
-let displayValue = {
+let operation = {
     firstNumber: '',
     operator: '',  
     secondNumber: '', 
+    solution: '',
 }
-let solution;
 
 
 const clearButton = document.querySelector('.clear');
 const deleteButton = document.querySelector('.delete');
 const displayBottom = document.querySelector('.display.bottom');
+const displayTop = document.querySelector('.display.top');
 const numberButtons = document.querySelectorAll('.calculator-btns > .btn:not(.operator)');
 const operatorButtons = document.querySelectorAll('.operator');
-clearButton.addEventListener('click', clearDisplay);
+const equalsButton = document.querySelector('.equals')
+
+
+equalsButton.addEventListener('click', () => {
+    performOperation();
+    operatorButtons.forEach((button) => {
+        button.classList.remove('.pressed');
+    })
+});
+
+
+clearButton.addEventListener('click', () => {
+    clearDisplayValue();
+    clearDisplay();
+});
 
 
 numberButtons.forEach((button) => {
-    button.addEventListener('click', addNumber)
+    button.addEventListener('click', () => {
+        addNumber(button);
+    })
 })
 
 
 operatorButtons.forEach((button) => {
-    button.addEventListener('click', addOperator)
+    button.addEventListener('click', () => {
+        addOperator(button);
+    })
 })
 
 
