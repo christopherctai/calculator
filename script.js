@@ -14,6 +14,9 @@ function multiply(a, b) {
 
 
 function divide(a, b) {
+    if (b == '0') {
+        return 'ERROR'
+    }
     return Math.round(1000 * (a / b)) / 1000;
 }
 
@@ -78,17 +81,20 @@ function performOperation() {
 }
 
 function deleteNumber() {
-    if (operation.firstNumber != '' && operation.operator != '') {
-        operation.secondNumber.substring(0, operation.secondNumber.length - 1);
-        displayBottom.textContent = `${operation.secondNumber}`;
-        displayTop.textContent = `${operation.secondNumber}`;
-    } else if (operation.firstNumber != '' && operation.operator === '') {
-        operation.operator = '';
-        displayBottom.textContent = `${operation.operator}`;
-    } else {
-        operation.firstNumber.substring(0, operation.firstNumber.length - 1);
+    if (operation.firstNumber != '' && operation.operator === '' && operation.secondNumber === '') {
+        operation.firstNumber = operation.firstNumber.substring(0, operation.firstNumber.length - 1);
         displayBottom.textContent = `${operation.firstNumber}`;
         displayTop.textContent = `${operation.firstNumber}`;
+    } else if (operation.firstNumber != '' && operation.operator != '' && operation.secondNumber === '') {
+        operation.operator = '';
+        displayTop.textContent = `${operation.firstNumber} ${operation.operator}`;
+        operatorButtons.forEach((button) => {
+            button.classList.remove('pressed');
+        });
+    } else {
+        operation.secondNumber = operation.secondNumber.substring(0, operation.secondNumber.length - 1);
+        displayBottom.textContent = `${operation.secondNumber}`;
+        displayTop.textContent = `${operation.firstNumber} ${operation.operator} ${operation.secondNumber}`;
     }
     console.log(operation);
 }
@@ -140,6 +146,9 @@ deleteButton.addEventListener('click', deleteNumber);
 clearButton.addEventListener('click', () => {
     clearDisplayValue();
     clearDisplay();
+    operatorButtons.forEach((button) => {
+        button.classList.remove('pressed');
+    })
 });
 
 
