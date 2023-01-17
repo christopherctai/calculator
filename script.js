@@ -1,5 +1,5 @@
 function add(a, b) {
-    return a + b;
+    return +a + +b;
 }
 
 
@@ -41,9 +41,11 @@ function addNumber(button) {
     if (operation.operator === '') {
         operation.firstNumber += button.textContent;
         displayBottom.textContent = `${operation.firstNumber}`;
+        displayTop.textContent = `${operation.firstNumber}`;
     } else if (operation.operator) {
         operation.secondNumber += button.textContent;
         displayBottom.textContent = `${operation.secondNumber}`;
+        displayTop.textContent = `${operation.firstNumber} ${operation.operator} ${operation.secondNumber}`;
     }
 }
 
@@ -51,13 +53,18 @@ function addNumber(button) {
 function addOperator(button) {
     if (operation.firstNumber != '' && operation.operator === '') {
         operation.operator = button.textContent;
-        button.classList.add('.pressed');
+        button.classList.add('pressed');
+        console.log(button.outerHTML);
     } 
     displayTop.textContent = `${operation.firstNumber} ${operation.operator} ${operation.secondNumber}`;
 }
 
 
 function performOperation() {
+    if (operation.firstNumber === 'ERROR') {
+        clearDisplayValue();
+        return;
+    }
     operation.solution = operate(operation.operator, operation.firstNumber, operation.secondNumber);
     if (operation.solution.length > 13) {
         clearDisplayValue();
@@ -66,7 +73,24 @@ function performOperation() {
     }
     displayBottom.textContent = `${operation.solution}`;
     clearDisplayValue();
-    operation.firstNumber = operation.solution;
+    operation.firstNumber = displayBottom.textContent;
+    console.log(operation);
+}
+
+function deleteNumber() {
+    if (operation.firstNumber != '' && operation.operator != '') {
+        operation.secondNumber.substring(0, operation.secondNumber.length - 1);
+        displayBottom.textContent = `${operation.secondNumber}`;
+        displayTop.textContent = `${operation.secondNumber}`;
+    } else if (operation.firstNumber != '' && operation.operator === '') {
+        operation.operator = '';
+        displayBottom.textContent = `${operation.operator}`;
+    } else {
+        operation.firstNumber.substring(0, operation.firstNumber.length - 1);
+        displayBottom.textContent = `${operation.firstNumber}`;
+        displayTop.textContent = `${operation.firstNumber}`;
+    }
+    console.log(operation);
 }
 
 
@@ -97,7 +121,7 @@ const clearButton = document.querySelector('.clear');
 const deleteButton = document.querySelector('.delete');
 const displayBottom = document.querySelector('.display.bottom');
 const displayTop = document.querySelector('.display.top');
-const numberButtons = document.querySelectorAll('.calculator-btns > .btn:not(.operator)');
+const numberButtons = document.querySelectorAll('.calculator-btns > .btn:not(.operator):not(.equals)');
 const operatorButtons = document.querySelectorAll('.operator');
 const equalsButton = document.querySelector('.equals')
 
@@ -105,9 +129,12 @@ const equalsButton = document.querySelector('.equals')
 equalsButton.addEventListener('click', () => {
     performOperation();
     operatorButtons.forEach((button) => {
-        button.classList.remove('.pressed');
+        button.classList.remove('pressed');
     })
 });
+
+
+deleteButton.addEventListener('click', deleteNumber);
 
 
 clearButton.addEventListener('click', () => {

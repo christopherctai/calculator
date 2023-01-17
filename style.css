@@ -85,7 +85,7 @@ body {
     background-color: green;
 }
 
-.pressed {
-    background-color:rgb(206, 206, 206)
+.btn.operator.pressed {
+    background-color:rgb(102, 255, 135)
 }
 
