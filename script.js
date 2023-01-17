@@ -57,8 +57,14 @@ function addOperator(button) {
     if (operation.firstNumber != '' && operation.operator === '') {
         operation.operator = button.textContent;
         button.classList.add('pressed');
-        console.log(button.outerHTML);
-    } 
+    } else if (operation.firstNumber != '' && operation.operator != '') {
+        operatorButtons.forEach((button) => {
+            button.classList.remove('pressed');
+        });
+        performOperation();
+        operation.operator = button.textContent;
+        button.classList.add('pressed');
+    }
     displayTop.textContent = `${operation.firstNumber} ${operation.operator} ${operation.secondNumber}`;
 }
 
