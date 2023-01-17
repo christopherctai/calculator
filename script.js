@@ -1,3 +1,51 @@
+
+let operation = {
+    firstNumber: '',
+    operator: '',  
+    secondNumber: '', 
+    solution: '',
+}
+
+
+const clearButton = document.querySelector('.clear');
+const deleteButton = document.querySelector('.delete');
+const displayBottom = document.querySelector('.display.bottom');
+const displayTop = document.querySelector('.display.top');
+const numberButtons = document.querySelectorAll('.calculator-btns > .btn:not(.operator):not(.equals)');
+const operatorButtons = document.querySelectorAll('.operator');
+const equalsButton = document.querySelector('.equals')
+
+
+equalsButton.addEventListener('click', () => {
+    performOperation();
+    unpressButton();
+});
+
+
+deleteButton.addEventListener('click', deleteNumber);
+
+
+clearButton.addEventListener('click', () => {
+    clearDisplayValue();
+    clearDisplay();
+    unpressButton();
+});
+
+
+numberButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        addNumber(button);
+    })
+})
+
+
+operatorButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        addOperator(button);
+    })
+})
+
+
 function add(a, b) {
     return +a + +b;
 }
@@ -119,53 +167,6 @@ function clearDisplayValue() {
     operation.secondNumber = '';
     operation.solution = '';
 }
-
-
-let operation = {
-    firstNumber: '',
-    operator: '',  
-    secondNumber: '', 
-    solution: '',
-}
-
-
-const clearButton = document.querySelector('.clear');
-const deleteButton = document.querySelector('.delete');
-const displayBottom = document.querySelector('.display.bottom');
-const displayTop = document.querySelector('.display.top');
-const numberButtons = document.querySelectorAll('.calculator-btns > .btn:not(.operator):not(.equals)');
-const operatorButtons = document.querySelectorAll('.operator');
-const equalsButton = document.querySelector('.equals')
-
-
-equalsButton.addEventListener('click', () => {
-    performOperation();
-    unpressButton();
-});
-
-
-deleteButton.addEventListener('click', deleteNumber);
-
-
-clearButton.addEventListener('click', () => {
-    clearDisplayValue();
-    clearDisplay();
-    unpressButton();
-});
-
-
-numberButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-        addNumber(button);
-    })
-})
-
-
-operatorButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-        addOperator(button);
-    })
-})
 
 
 // pseudo code 
