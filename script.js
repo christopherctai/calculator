@@ -58,9 +58,7 @@ function addOperator(button) {
         operation.operator = button.textContent;
         button.classList.add('pressed');
     } else if (operation.firstNumber != '' && operation.operator != '') {
-        operatorButtons.forEach((button) => {
-            button.classList.remove('pressed');
-        });
+        unpressButton();
         performOperation();
         operation.operator = button.textContent;
         button.classList.add('pressed');
@@ -83,7 +81,6 @@ function performOperation() {
     displayBottom.textContent = `${operation.solution}`;
     clearDisplayValue();
     operation.firstNumber = displayBottom.textContent;
-    console.log(operation);
 }
 
 function deleteNumber() {
@@ -94,17 +91,20 @@ function deleteNumber() {
     } else if (operation.firstNumber != '' && operation.operator != '' && operation.secondNumber === '') {
         operation.operator = '';
         displayTop.textContent = `${operation.firstNumber} ${operation.operator}`;
-        operatorButtons.forEach((button) => {
-            button.classList.remove('pressed');
-        });
+        unpressButton();
     } else {
         operation.secondNumber = operation.secondNumber.substring(0, operation.secondNumber.length - 1);
         displayBottom.textContent = `${operation.secondNumber}`;
         displayTop.textContent = `${operation.firstNumber} ${operation.operator} ${operation.secondNumber}`;
     }
-    console.log(operation);
 }
 
+
+function unpressButton() {
+    operatorButtons.forEach((button) => {
+        button.classList.remove('pressed');
+    });
+}
 
 
 function clearDisplay() {
@@ -140,9 +140,7 @@ const equalsButton = document.querySelector('.equals')
 
 equalsButton.addEventListener('click', () => {
     performOperation();
-    operatorButtons.forEach((button) => {
-        button.classList.remove('pressed');
-    })
+    unpressButton();
 });
 
 
@@ -152,9 +150,7 @@ deleteButton.addEventListener('click', deleteNumber);
 clearButton.addEventListener('click', () => {
     clearDisplayValue();
     clearDisplay();
-    operatorButtons.forEach((button) => {
-        button.classList.remove('pressed');
-    })
+    unpressButton();
 });
 
 
